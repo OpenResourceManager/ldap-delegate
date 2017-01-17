@@ -1,4 +1,4 @@
 general:
   control_server_hostname: localhost
   control_server_port: 3000
-  bc_key: false # You must run: `php artisan slerp:bckey` on the SLERP api server to generate a BC_KEY, after that paste the key string here
+  bc_key: false # You must run: `php artisan orm:bckey` on the ORM Core API server to generate a BC_KEY, after that paste the key string here

@@ -23,9 +23,9 @@ def load_config():
     SERVER_PORT = config['control_server_port']
     try:
         if not config['bc_key']:
-            raise Exception('You have not provided a `bc_key` in your config file! Hint: `php artisan slerp:bckey`')
+            raise Exception('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
     except KeyError:
-        raise KeyError('You have not provided a `bc_key` in your config file! Hint: `php artisan slerp:bckey`')
+        raise KeyError('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
     BC_KEY = config['bc_key']
 
 
