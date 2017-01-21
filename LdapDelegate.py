@@ -10,17 +10,17 @@ from includes.helpers import read_config, read_encrypted_message
 IO = None
 HOST_NAME = None
 BC_KEY = None
-SERVER_ADDRESS = 'localhost'
-SERVER_PORT = 3000
+DELEGATE_HOST = 'localhost'
+DELEGATE_PORT = 3000
 
 
 def load_config():
-    global HOST_NAME, SERVER_ADDRESS, SERVER_PORT, BC_KEY
+    global HOST_NAME, DELEGATE_HOST, DELEGATE_PORT, BC_KEY
     c = read_config()
     config = c['general']
     HOST_NAME = socket.gethostname()
-    SERVER_ADDRESS = config['control_server_hostname']
-    SERVER_PORT = config['control_server_port']
+    DELEGATE_HOST = config['delegate_server_host']
+    DELEGATE_PORT = config['delegate_server_port']
     try:
         if not config['bc_key']:
             raise Exception('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
@@ -32,7 +32,7 @@ def load_config():
 def connect_to_sio():
     global IO
     print('Connecting...')
-    IO = SocketIO(SERVER_ADDRESS, SERVER_PORT, LoggingNamespace)
+    IO = SocketIO(DELEGATE_HOST, DELEGATE_PORT, LoggingNamespace)
     print('Connected!')
 
 
