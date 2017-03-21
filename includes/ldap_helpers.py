@@ -120,7 +120,7 @@ def form_middle_name(account):
 
 def form_user(account, mail_domain, home_share_path, home_drive_letter='H'):
     return {
-        'description': 'ID: ' + str(account['identifier']) + ' - automatically managed by SLERP',
+        'description': 'ID: ' + str(account['identifier']) + ' - automatically managed by ORM',
         'displayName': str(account['name_full']),
         'givenName': str(account['name_first'].capitalize()),
         'middleName': form_middle_name(account),
