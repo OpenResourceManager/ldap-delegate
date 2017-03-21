@@ -1,5 +1,6 @@
 from __future__ import print_function
-from yaml import load, safe_load
+from yaml import load
+from json import loads
 from Crypto.Cipher import AES
 import base64
 
@@ -28,7 +29,7 @@ def __decrypt_string(encrypted_data, key):
 
 
 def _read_message(json_string):
-    return safe_load(json_string)
+    return loads(json_string)
 
 
 def read_encrypted_message(encrypted_data, key):

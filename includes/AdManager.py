@@ -46,48 +46,49 @@ class AdManager(object):
                 print('LDAP Set Password: ' + account['username'] + ' - ' + account['identifier'])
 
     def create_group(self, group, group_type):
-        group_dn = build_group_dn(group['label'], group_type, self.settings['base_group_ou_dn'])
-        if create_group(group['label'], group_dn, self.tree_base, self.connection):
-            print('LDAP Created Group: ' + group['label'])
+        group_dn = build_group_dn(build_group_cn(group), group_type, self.settings['base_group_ou_dn'])
+        if create_group(build_group_cn(group), group_dn, self.tree_base, self.connection):
+            print('LDAP Created Group: ' + build_group_cn(group))
 
     def restore_group(self, group, group_type):
-        group_dn = build_group_dn(group['label'], group_type, self.settings['base_group_ou_dn'])
-        if create_group(group['label'], group_dn, self.tree_base, self.connection):
-            print('LDAP Restored Group: ' + group['label'])
+        group_dn = build_group_dn(build_group_cn(group), group_type, self.settings['base_group_ou_dn'])
+        if create_group(build_group_cn(group), group_dn, self.tree_base, self.connection):
+            print('LDAP Restored Group: ' + build_group_cn(group))
 
     def delete_group(self, group, group_type):
-        group_dn = build_group_dn(group['label'], group_type, self.settings['base_group_ou_dn'])
+        group_dn = build_group_dn(build_group_cn(group), group_type, self.settings['base_group_ou_dn'])
         if delete_group(group_dn, self.tree_base, self.connection):
-            print('LDAP Deleted Group: ' + group['label'])
+            print('LDAP Deleted Group: ' + build_group_cn(group))
 
     def add_account_to_group(self, account, group, group_type):
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
             account_dn = result[0][0]
-            group_dn = build_group_dn(group['label'], group_type, self.settings['base_group_ou_dn'])
+            group_dn = build_group_dn(build_group_cn(group), group_type,
+                                      self.settings['base_group_ou_dn'])
             group_result = get_group(group_dn, self.tree_base, self.connection)
             if not group_result:
                 self.create_group(group, group_type)
             if add_to_group(account_dn, group_dn, self.tree_base, self.connection):
                 print('LDAP Added Account To Group: ' + account['username'] +
-                      ' - ' + account['identifier'] + ' -->> ' + group['label'])
+                      ' - ' + account['identifier'] + ' -->> ' + build_group_cn(group))
 
     def remove_account_from_group(self, account, group, group_type):
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
             account_dn = result[0][0]
-            group_dn = build_group_dn(group['label'], group_type, self.settings['base_group_ou_dn'])
+            group_dn = build_group_dn(build_group_cn(group), group_type, self.settings['base_group_ou_dn'])
             group_result = get_group(group_dn, self.tree_base, self.connection)
             if not group_result:
                 self.create_group(group, group_type)
             if remove_from_group(account_dn, group_dn, self.tree_base, self.connection):
                 print('LDAP Removed Account From Group: ' + account['username'] +
-                      ' - ' + account['identifier'] + ' ---- ' + group['label'])
+                      ' - ' + account['identifier'] + ' ---- ' + build_group_cn(group))
 
     def add_group_to_group(self, target_group, target_group_type, des_group, des_group_type):
         # Build the DNs
-        target_group_dn = build_group_dn(target_group['label'], target_group_type, self.settings['base_group_ou_dn'])
-        des_group_dn = build_group_dn(des_group['label'], des_group_type, self.settings['base_group_ou_dn'])
+        target_group_dn = build_group_dn(build_group_cn(target_group), target_group_type, self.settings['base_group_ou_dn'])
+        des_group_dn = build_group_dn(build_group_cn(des_group), des_group_type, self.settings['base_group_ou_dn'])
         # Check to see if the groups exist
         target_result = get_group(target_group_dn, self.tree_base, self.connection)
         des_result = get_group(des_group_dn, self.tree_base, self.connection)
@@ -100,10 +101,10 @@ class AdManager(object):
 
         # Add the target to the destination group
         if add_to_group(target_group_dn, des_group_dn, self.tree_base, self.connection):
-            print('LDAP Added Group To Group: ' + target_group['label'] + ' -->> ' + des_group['label'])
+            print('LDAP Added Group To Group: ' + build_group_cn(target_group) + ' -->> ' + build_group_cn(des_group))
 
     def remove_group_from_group(self, target_group, target_group_type, des_group, des_group_type):
-        target_group_dn = build_group_dn(target_group['label'], target_group_type, self.settings['base_group_ou_dn'])
-        des_group_dn = build_group_dn(des_group['label'], des_group_type, self.settings['base_group_ou_dn'])
+        target_group_dn = build_group_dn(build_group_cn(target_group), target_group_type, self.settings['base_group_ou_dn'])
+        des_group_dn = build_group_dn(build_group_cn(des_group), des_group_type, self.settings['base_group_ou_dn'])
         if remove_from_group(target_group_dn, des_group_dn, self.tree_base, self.connection):
-            print('LDAP Removed Group From Group: ' + target_group['label'] + ' ---- ' + des_group['label'])
+            print('LDAP Removed Group From Group: ' + build_group_cn(target_group) + ' ---- ' + build_group_cn(des_group))

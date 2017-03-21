@@ -23,6 +23,10 @@ def build_duty_ou_dn(name, base_account_ou):
     return 'OU=' + name + ',' + base_account_ou
 
 
+def build_group_cn(group):
+    return group['label'] + ' - ' + group['code']
+
+
 def build_group_dn(cn, type_name, base_ou):
     return 'CN=' + cn + ',' + 'OU=' + type_name + ',' + base_ou
 
@@ -139,7 +143,7 @@ def form_group(cn, dn):
         'cn': str(cn),
         'distinguishedName': str(dn),
         'groupType': '-2147483646',
-        'description': str(cn) + ' - automatically managed by SLERP',
+        'description': str(cn) + ' - automatically managed by ORM',
         'name': str(cn),
         'sAMAccountName': str(cn)
     }
