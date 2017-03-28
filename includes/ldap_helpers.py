@@ -20,25 +20,25 @@ def connect(bind_user, bind_pass, hosts):
 
 
 def build_duty_ou_dn(name, base_account_ou):
-    return 'OU=' + name + ',' + base_account_ou
+    return 'OU=' + ldap.dn.escape_dn_chars(name) + ',' + base_account_ou
 
 
 def build_group_cn(group):
-    return group['label'] + ' - ' + group['code']
+    return group['code']
 
 
 def build_group_dn(cn, type_name, base_ou):
-    return 'CN=' + cn + ',' + 'OU=' + type_name + ',' + base_ou
+    return 'CN=' + ldap.dn.escape_dn_chars(cn) + ',' + 'OU=' + ldap.dn.escape_dn_chars(type_name) + ',' + base_ou
 
 
 def build_account_dn(cn, ou):
-    return 'CN=' + cn + ',' + ou
+    return 'CN=' + ldap.dn.escape_dn_chars(cn) + ',' + ou
 
 
 def build_account_ou(account, base_ou, duties_map_to_ou):
     ou = base_ou
     if duties_map_to_ou:
-        ou = 'OU=' + account['primary_duty']['label'] + ',' + ou
+        ou = 'OU=' + ldap.dn.escape_dn_chars(account['primary_duty']['code']) + ',' + ou
     return ou
 
 
@@ -137,15 +137,16 @@ def form_user(account, mail_domain, home_share_path, home_drive_letter='H'):
     }
 
 
-def form_group(cn, dn):
+def form_group(cn, dn, display_name):
     return {
         'objectClass': ['top', 'group'],
         'cn': str(cn),
         'distinguishedName': str(dn),
         'groupType': '-2147483646',
-        'description': str(cn) + ' - automatically managed by ORM',
+        'description': str(cn) + ' ' + str(display_name) + ' - automatically managed by ORM',
         'name': str(cn),
-        'sAMAccountName': str(cn)
+        'sAMAccountName': str(cn),
+        'displayName': str(display_name)
     }
 
 
@@ -257,9 +258,9 @@ def create_ou(cn, dn, connection):
         return False
 
 
-def create_group(cn, dn, tree_base, connection):
+def create_group(cn, dn, display_name, tree_base, connection):
     verify_parent_ou_exists(dn, tree_base, connection)
-    group_object = form_group(cn, dn)
+    group_object = form_group(cn, dn, display_name)
     result = create_object(dn, group_object, connection)
     if result:
         return result
@@ -341,9 +342,9 @@ def remove_from_group(target_dn, group_dn, tree_base, connection):
     return True
 
 
-def add_account_to_primary_duty_group(account_dn, group_dn, group_cn, tree_base, connection):
+def add_account_to_primary_duty_group(account_dn, group_dn, group_cn, group_display_name, tree_base, connection):
     if not get_group(group_dn, tree_base, connection):
-        create_group(group_cn, group_dn, tree_base, connection)
+        create_group(group_cn, group_dn, group_display_name, tree_base, connection)
     if add_to_group(account_dn, group_dn, tree_base, connection):
         return True
     else:
@@ -353,7 +354,7 @@ def add_account_to_primary_duty_group(account_dn, group_dn, group_cn, tree_base,
 def create_account(account, connection, settings):
     ou = build_account_ou(account, settings['base_user_ou_dn'], settings['duties_map_to_ou'])
     dn = build_account_dn(account['username'], ou)
-    primary_duty_group_dn = build_group_dn(account['primary_duty']['label'], 'Duty', settings['base_group_ou_dn'])
+    primary_duty_group_dn = build_group_dn(account['primary_duty']['code'], 'Duty', settings['base_group_ou_dn'])
     home_share_path = build_home_share_path(account, settings['home_drive_path_pattern'])
     new_account = form_user(account, settings['email_domain'], home_share_path, settings['home_drive_letter'])
     verify_parent_ou_exists(dn, settings['tree_base'], connection)
@@ -367,6 +368,7 @@ def create_account(account, connection, settings):
         add_account_to_primary_duty_group(
             dn,
             primary_duty_group_dn,
+            account['primary_duty']['code'],
             account['primary_duty']['label'],
             settings['tree_base'],
             connection
@@ -380,7 +382,7 @@ def modify_account(account, old_ldap_account, connection, settings):
     new_dn = build_account_dn(account['username'], new_ou)
     home_share_path = build_home_share_path(account, settings['home_drive_path_pattern'])
     renamed = False
-    primary_duty_group_dn = build_group_dn(account['primary_duty']['label'], 'Duty', settings['base_group_ou_dn'])
+    primary_duty_group_dn = build_group_dn(account['primary_duty']['code'], 'Duty', settings['base_group_ou_dn'])
     new_attributes = form_user(account, settings['email_domain'], home_share_path, settings['home_drive_letter'])
     old_dn = old_ldap_account[0][0]
     old_attributes = old_ldap_account[0][1]
@@ -421,6 +423,7 @@ def modify_account(account, old_ldap_account, connection, settings):
     add_account_to_primary_duty_group(
         dn_to_modify,
         primary_duty_group_dn,
+        account['primary_duty']['code'],
         account['primary_duty']['label'],
         settings['tree_base'],
         connection
