@@ -23,6 +23,10 @@ def build_duty_ou_dn(name, base_account_ou):
     return 'OU=' + ldap.dn.escape_dn_chars(name) + ',' + base_account_ou
 
 
+def build_trash_ou_dn(base_account_ou):
+    return 'OU=Trash,' + base_account_ou
+
+
 def build_group_cn(group):
     return group['code']
 
@@ -448,4 +452,12 @@ def delete_or_disable_account(account, connection, settings):
         delete_object(account_dn, connection)
     else:
         disable_account(account_dn, connection)
+        if settings['use_trash_ou']:
+            if account_dn != ''.join(['CN=', account['username'], ',', build_trash_ou_dn(settings['base_user_ou_dn'])]):
+                rename_object(
+                    account_dn,
+                    account['username'],
+                    build_trash_ou_dn(settings['base_user_ou_dn']),
+                    connection
+                )
     return True
