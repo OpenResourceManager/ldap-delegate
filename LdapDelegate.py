@@ -46,6 +46,16 @@ def on_create_account(*args):
             ad.new_account(account)
 
 
+def on_update_account(*args):
+    for arg in args:
+        message = read_encrypted_message(arg, BC_KEY)
+        ldap_conf = message['conf']['ldap']
+        account = message['data']
+        if ldap_conf['enabled']:
+            ad = AdManager(ldap_conf)
+            ad.modify_account(account)
+
+
 def on_delete_account(*args):
     for arg in args:
         message = read_encrypted_message(arg, BC_KEY)
@@ -351,6 +361,7 @@ def main():
     IO.emit('join', {'hostname': HOST_NAME})
     # Account Listeners
     IO.on('create_account', on_create_account)
+    IO.on('update_account', on_update_account)
     IO.on('delete_account', on_delete_account)
     IO.on('restore_account', on_restore_account)
     # Duty Listeners
