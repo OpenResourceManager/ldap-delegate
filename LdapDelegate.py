@@ -256,6 +256,36 @@ def on_restore_course(*args):
             ad.restore_group(course, 'Course')
 
 
+def on_create_school(*args):
+    for arg in args:
+        message = read_encrypted_message(arg, BC_KEY)
+        ldap_conf = message['conf']['ldap']
+        school = message['data']
+        if ldap_conf['enabled']:
+            ad = AdManager(ldap_conf)
+            ad.create_group(school, 'School')
+
+
+def on_destroy_school(*args):
+    for arg in args:
+        message = read_encrypted_message(arg, BC_KEY)
+        ldap_conf = message['conf']['ldap']
+        school = message['data']
+        if ldap_conf['enabled']:
+            ad = AdManager(ldap_conf)
+            ad.delete_group(school, 'School')
+
+
+def on_restore_school(*args):
+    for arg in args:
+        message = read_encrypted_message(arg, BC_KEY)
+        ldap_conf = message['conf']['ldap']
+        school = message['data']
+        if ldap_conf['enabled']:
+            ad = AdManager(ldap_conf)
+            ad.restore_group(school, 'School')
+
+
 def on_course_account_assignment(*args):
     for arg in args:
         message = read_encrypted_message(arg, BC_KEY)
@@ -352,6 +382,30 @@ def on_room_account_unassignment(*args):
             ad.remove_account_from_group(account, room, 'Room')
 
 
+def on_school_account_assignment(*args):
+    for arg in args:
+        message = read_encrypted_message(arg, BC_KEY)
+        ldap_conf = message['conf']['ldap']
+        data = message['data']
+        account = data['account']
+        school = data['school']
+        if ldap_conf['enabled']:
+            ad = AdManager(ldap_conf)
+            ad.add_account_to_group(account, school, 'School')
+
+
+def on_school_account_unassignment(*args):
+    for arg in args:
+        message = read_encrypted_message(arg, BC_KEY)
+        ldap_conf = message['conf']['ldap']
+        data = message['data']
+        account = data['account']
+        school = data['school']
+        if ldap_conf['enabled']:
+            ad = AdManager(ldap_conf)
+            ad.remove_account_from_group(account, school, 'School')
+
+
 def main():
     # Load the configuration
     load_config()
@@ -397,6 +451,8 @@ def main():
     IO.on('duty_account_unassignment', on_duty_account_unassignment)
     IO.on('room_account_assignment', on_room_account_assignment)
     IO.on('room_account_unassignment', on_room_account_unassignment)
+    IO.on('school_account_assignment', on_school_account_assignment)
+    IO.on('school_account_unassignment', on_school_account_unassignment)
     # Hang out
     IO.wait()
 
