@@ -447,17 +447,22 @@ def create_or_modify_account(account, connection, tree_base, settings):
 
 def delete_or_disable_account(account, connection, settings):
     result = get_user_by_username(account['username'], settings['tree_base'], connection)
-    account_dn = result[0][0]
-    if settings['delete_users']:
-        delete_object(account_dn, connection)
-    else:
-        disable_account(account_dn, connection)
-        if settings['use_trash_ou']:
-            if account_dn != ''.join(['CN=', account['username'], ',', build_trash_ou_dn(settings['base_user_ou_dn'])]):
-                rename_object(
-                    account_dn,
-                    account['username'],
-                    build_trash_ou_dn(settings['base_user_ou_dn']),
-                    connection
-                )
+    account_dn = False
+    if len(result) > 0:
+        if len(result[0]) > 0:
+            account_dn = result[0][0]
+    if account_dn:
+        if settings['delete_users']:
+            delete_object(account_dn, connection)
+        else:
+            disable_account(account_dn, connection)
+            if settings['use_trash_ou']:
+                if account_dn != ''.join(
+                        ['CN=', account['username'], ',', build_trash_ou_dn(settings['base_user_ou_dn'])]):
+                    rename_object(
+                        account_dn,
+                        account['username'],
+                        build_trash_ou_dn(settings['base_user_ou_dn']),
+                        connection
+                    )
     return True
