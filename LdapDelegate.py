@@ -3,9 +3,9 @@ from __future__ import print_function
 from socketIO_client import SocketIO, LoggingNamespace
 from includes.AdManager import AdManager
 from includes.helpers import read_config, read_encrypted_message
+from includes.Daemon import Daemon
 import socket
 import sys
-from includes.Daemon import Daemon
 
 
 class LdapDelegate(Daemon):
