@@ -1,5 +1,6 @@
-from __future__ import print_function
 import ldap
+from includes.helpers import write_error
+
 from ldap import modlist
 
 
@@ -15,7 +16,8 @@ def connect(bind_user, bind_pass, hosts):
             if connection:
                 return connection
         except ldap.LDAPError, error_message:
-            print("Error connecting to LDAP server: " + host + ' ' + str(error_message))
+            message = ''.join(["Error connecting to LDAP server: ", host, ' ', str(error_message)])
+            write_error(message)
     return connection
 
 
@@ -216,7 +218,8 @@ def perform_search(ldap_filter, base_dn, connection, attributes):
         else:
             return results
     except ldap.LDAPError, error_message:
-        print("Search error: " + str(error_message))
+        message = ''.join(['Search error: ', str(error_message)])
+        write_error(message)
         return False
 
 
@@ -224,7 +227,8 @@ def create_object(dn, formed_object, connection):
     try:
         return connection.add_s(dn, modlist.addModlist(formed_object))
     except ldap.LDAPError, error_message:
-        print("Add error: " + str(error_message))
+        message = ''.join(['Add error: ' + str(error_message)])
+        write_error(message)
         return False
 
 
@@ -232,7 +236,8 @@ def modify_object(dn, action, connection):
     try:
         return connection.modify_s(dn, action)
     except ldap.LDAPError, error_message:
-        print("Modify error: " + str(error_message))
+        message = ''.join(['Modify error: ' + str(error_message)])
+        write_error(message)
         return False
 
 
@@ -240,7 +245,8 @@ def delete_object(dn, connection):
     try:
         return connection.delete_s(dn)
     except ldap.LDAPError, error_message:
-        print("Delete error: " + str(error_message))
+        message = ''.join(['Delete error: ', str(error_message)])
+        write_error(message)
         return False
 
 
@@ -248,7 +254,8 @@ def rename_object(current_dn, new_cn, new_ou, connection):
     try:
         return connection.rename_s(current_dn, 'CN=' + new_cn, new_ou)
     except ldap.LDAPError, error_message:
-        print("Rename error: " + str(error_message))
+        message = ''.join(['Rename error: ', str(error_message)])
+        write_error(message)
         return False
 
 
@@ -258,7 +265,8 @@ def create_ou(cn, dn, connection):
     if result:
         return result
     else:
-        print('Error creating OU: ' + dn)
+        message = ''.join(['Error creating OU: ', dn])
+        write_error(message)
         return False
 
 
@@ -269,7 +277,8 @@ def create_group(cn, dn, display_name, tree_base, connection):
     if result:
         return result
     else:
-        print('Error creating Group: ' + dn)
+        message = ''.join(['Error creating Group: ', dn])
+        write_error(message)
         return False
 
 
@@ -289,7 +298,8 @@ def set_password(dn, password, connection):
     if result:
         return result
     else:
-        print('Error setting password for: ' + dn)
+        message = ''.join(['Error setting password for: ', dn])
+        write_error(message)
         return False
 
 
@@ -299,7 +309,8 @@ def enable_account(dn, connection):
     if result:
         return result
     else:
-        print('Error enabling account: ' + dn)
+        message = ''.join(['Error enabling account: ', dn])
+        write_error(message)
         return False
 
 
@@ -309,7 +320,8 @@ def disable_account(dn, connection):
     if result:
         return result
     else:
-        print('Error disabling account: ' + dn)
+        message = ''.join(['Error disabling account: ', dn])
+        write_error(message)
         return False
 
 
@@ -329,7 +341,8 @@ def add_to_group(target_dn, group_dn, tree_base, connection):
         if result:
             return result
         else:
-            print('Error adding ' + target_dn + ' to Group: ' + group_dn)
+            message = ''.join(['Error adding ', target_dn, ' to Group: ', group_dn])
+            write_error(message)
             return False
     return True
 
@@ -341,7 +354,8 @@ def remove_from_group(target_dn, group_dn, tree_base, connection):
         if result:
             return result
         else:
-            print('Error removing ' + target_dn + ' from Group: ' + group_dn)
+            message = ''.join(['Error removing ', target_dn, ' from Group: ', group_dn])
+            write_error(message)
             return False
     return True
 

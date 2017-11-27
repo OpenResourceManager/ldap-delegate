@@ -2,7 +2,7 @@
 from __future__ import print_function
 from socketIO_client import SocketIO, LoggingNamespace
 from includes.AdManager import AdManager
-from includes.helpers import read_config, read_encrypted_message
+from includes.helpers import read_config, read_encrypted_message, write_log
 from signal import SIGTERM
 import socket
 import sys
@@ -31,7 +31,7 @@ class LdapDelegate:
         Programming in the UNIX Environment" for details (ISBN 0201563177)
         http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC16
         """
-        sys.stdout.write("Initializing Daemon...\n")
+        write_log("Initializing Daemon...")
         try:
             pid = os.fork()
             if pid > 0:
@@ -70,7 +70,7 @@ class LdapDelegate:
         atexit.register(self.delpid)
         pid = str(os.getpid())
         file(self.pidfile, 'w+').write("%s\n" % pid)
-        sys.stdout.write("Started...\n")
+        write_log("Started...")
 
     def delpid(self):
         os.remove(self.pidfile)
@@ -79,7 +79,7 @@ class LdapDelegate:
         """
         Start the daemon
         """
-        sys.stdout.write("Starting...\n")
+        write_log("Starting...")
         # Check for a pidfile to see if the daemon already runs
         try:
             pf = file(self.pidfile, 'r')
@@ -553,11 +553,9 @@ if __name__ == "__main__":
         elif 'restart' == sys.argv[1]:
             daemon.restart()
         else:
-            print
-            "Unknown command"
+            write_log("Unknown command")
             sys.exit(2)
         sys.exit(0)
     else:
-        print
-        "usage: %s start|stop|restart" % sys.argv[0]
+        write_log("usage: %s start|stop|restart" % sys.argv[0])
         sys.exit(2)

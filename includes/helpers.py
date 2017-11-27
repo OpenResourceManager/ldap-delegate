@@ -1,8 +1,9 @@
-from __future__ import print_function
 from yaml import load
 from json import loads
+from datetime import datetime
 from Crypto.Cipher import AES
 import base64
+import sys
 
 
 # read config.yaml
@@ -11,6 +12,14 @@ def read_config():
     with open('/etc/orm/ldap/config.yaml') as data_file:
         # return the json object as a python object
         return load(data_file)
+
+
+def write_log(message):
+    sys.stdout.write(''.join(['[', str(datetime.now()), '] ', message, "\n"]))
+
+
+def write_error(message):
+    sys.stderr.write(''.join(['[', str(datetime.now()), '] ', message, "\n"]))
 
 
 def __decrypt_string(encrypted_data, key):
