@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=forking
-ExecStart=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate.py start
-ExecStop=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate.py stop
+ExecStart=/opt/OpenResourceManager/LdapDelegate/LdapDelegate start
+ExecStop=/opt/OpenResourceManager/LdapDelegate/LdapDelegate stop
 WorkingDirectory=/opt/OpenResourceManager/LdapDelegate
 PIDFile=/var/run/ldap-delegate.pid
 Restart=always
