@@ -7,14 +7,14 @@ from includes.Daemon import Daemon
 import socket
 import sys
 
+IO = None
+HOST_NAME = None
+BC_KEY = None
+DELEGATE_HOST = 'localhost'
+DELEGATE_PORT = 3000
+
 
 class LdapDelegate(Daemon):
-    IO = None
-    HOST_NAME = None
-    BC_KEY = None
-    DELEGATE_HOST = 'localhost'
-    DELEGATE_PORT = 3000
-
     @staticmethod
     def load_config():
         global HOST_NAME, DELEGATE_HOST, DELEGATE_PORT, BC_KEY
