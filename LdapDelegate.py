@@ -7,14 +7,14 @@ import socket
 import sys
 import includes.Daemon
 
+IO = None
+HOST_NAME = None
+BC_KEY = None
+DELEGATE_HOST = 'localhost'
+DELEGATE_PORT = 3000
+
 
 class LdapDelegate(includes.Daemon):
-    IO = None
-    HOST_NAME = None
-    BC_KEY = None
-    DELEGATE_HOST = 'localhost'
-    DELEGATE_PORT = 3000
-
     def __init__(self, pidfile, stdin='/dev/null',
                  stdout='/var/log/orm/LdapDelegate/ldap.log', stderr='/var/log/orm/LdapDelegate/ldap_err.log'):
         self.stdin = stdin
