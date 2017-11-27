@@ -31,6 +31,7 @@ class LdapDelegate:
         Programming in the UNIX Environment" for details (ISBN 0201563177)
         http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC16
         """
+        sys.stdout.write("Initializing Daemon...\n")
         try:
             pid = os.fork()
             if pid > 0:
