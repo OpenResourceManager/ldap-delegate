@@ -8,7 +8,7 @@ import base64
 # read config.yaml
 def read_config():
     # Open the config file
-    with open('config/config.yaml') as data_file:
+    with open('/etc/orm/ldap/config.yaml') as data_file:
         # return the json object as a python object
         return load(data_file)
 
