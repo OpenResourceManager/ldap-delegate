@@ -79,7 +79,7 @@ class LdapDelegate:
         """
         Start the daemon
         """
-        write_log("Starting...")
+        sys.stdout.write("Starting...\n")
         # Check for a pidfile to see if the daemon already runs
         try:
             pf = file(self.pidfile, 'r')
