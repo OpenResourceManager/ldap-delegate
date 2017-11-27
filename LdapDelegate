@@ -31,7 +31,7 @@ class LdapDelegate:
         Programming in the UNIX Environment" for details (ISBN 0201563177)
         http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC16
         """
-        write_log("Initializing Daemon...")
+        sys.stdout.write("Initializing Daemon...\n")
         try:
             pid = os.fork()
             if pid > 0:
@@ -153,9 +153,9 @@ class LdapDelegate:
 
     def connect_to_sio(self):
         global IO
-        print('Connecting...')
+        write_log('Connecting...')
         IO = SocketIO(DELEGATE_HOST, DELEGATE_PORT, LoggingNamespace)
-        print('Connected!')
+        write_log('Connected!')
 
     def on_create_account(*args):
         for arg in args:
@@ -553,9 +553,9 @@ if __name__ == "__main__":
         elif 'restart' == sys.argv[1]:
             daemon.restart()
         else:
-            write_log("Unknown command")
+            print("Unknown command")
             sys.exit(2)
         sys.exit(0)
     else:
-        write_log("usage: %s start|stop|restart" % sys.argv[0])
+        print("usage: %s start|stop|restart" % sys.argv[0])
         sys.exit(2)
