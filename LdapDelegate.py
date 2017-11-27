@@ -5,22 +5,15 @@ from includes.AdManager import AdManager
 from includes.helpers import read_config, read_encrypted_message
 import socket
 import sys
-import includes.Daemon
-
-IO = None
-HOST_NAME = None
-BC_KEY = None
-DELEGATE_HOST = 'localhost'
-DELEGATE_PORT = 3000
+from includes.Daemon import Daemon
 
 
-class LdapDelegate(includes.Daemon):
-    def __init__(self, pidfile, stdin='/dev/null',
-                 stdout='/var/log/orm/LdapDelegate/ldap.log', stderr='/var/log/orm/LdapDelegate/ldap_err.log'):
-        self.stdin = stdin
-        self.stdout = stdout
-        self.stderr = stderr
-        self.pidfile = pidfile
+class LdapDelegate(Daemon):
+    IO = None
+    HOST_NAME = None
+    BC_KEY = None
+    DELEGATE_HOST = 'localhost'
+    DELEGATE_PORT = 3000
 
     @staticmethod
     def load_config():
@@ -431,7 +424,8 @@ class LdapDelegate(includes.Daemon):
 
 
 if __name__ == "__main__":
-    daemon = LdapDelegate('/var/run/ldap-delegate.pid')
+    daemon = LdapDelegate('/var/run/ldap-delegate.pid', '/var/log/orm/LdapDelegate/ldap.log',
+                          '/var/log/orm/LdapDelegate/ldap_err.log')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             daemon.start()
