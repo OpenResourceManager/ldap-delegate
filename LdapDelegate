@@ -77,7 +77,7 @@ class LdapDelegate:
         """
         Start the daemon
         """
-        sys.stdout.write("Starting..." % self.pidfile)
+        sys.stdout.write("Starting...")
         # Check for a pidfile to see if the daemon already runs
         try:
             pf = file(self.pidfile, 'r')
@@ -99,7 +99,7 @@ class LdapDelegate:
         """
         Stop the daemon
         """
-        sys.stdout.write("Stopping..." % self.pidfile)
+        sys.stdout.write("Stopping...")
         # Get the pid from the pidfile
         try:
             pf = file(self.pidfile, 'r')
