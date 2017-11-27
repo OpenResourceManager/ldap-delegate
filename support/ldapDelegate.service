@@ -3,8 +3,9 @@ Description=ORM LDAP Delegate Service
 After=network.target
 
 [Service]
-Type=simple
-ExecStart=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate.py
+Type=forking
+ExecStart=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate.py start
+ExecStop=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate.py stop
 WorkingDirectory=/opt/OpenResourceManager/LdapDelegate
 PIDFile=/var/run/ldap-delegate.pid
 Restart=always
