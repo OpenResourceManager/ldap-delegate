@@ -1,0 +1,14 @@
+[Unit]
+Description=ORM LDAP Delegate Service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate.py | /usr/bin/tee /var/log/orm/LdapDelegate/ldap.log
+WorkingDirectory=/opt/OpenResourceManager/LdapDelegate
+PIDFile=/var/run/ldap-delegate.pid
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=sysinit.target
+Alias=ldapDelegate.service
