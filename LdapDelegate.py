@@ -424,8 +424,8 @@ class LdapDelegate(Daemon):
 
 
 if __name__ == "__main__":
-    daemon = LdapDelegate('/var/run/ldap-delegate.pid', '/var/log/orm/LdapDelegate/ldap.log',
-                          '/var/log/orm/LdapDelegate/ldap_err.log')
+    daemon = LdapDelegate('/var/run/ldap-delegate.pid', '/var/log/orm/LdapDelegate/run.log',
+                          '/var/log/orm/LdapDelegate/error.log')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             daemon.start()
