@@ -3,12 +3,12 @@ Description=ORM LDAP Delegate Service
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 ExecStart=/opt/OpenResourceManager/LdapDelegate/LdapDelegate start
 ExecStop=/opt/OpenResourceManager/LdapDelegate/LdapDelegate stop
 WorkingDirectory=/opt/OpenResourceManager/LdapDelegate
 PIDFile=/var/run/ldap-delegate.pid
-Restart=always
+Restart=on-failure
 RestartSec=2
 
 [Install]
