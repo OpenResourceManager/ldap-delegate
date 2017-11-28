@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/opt/OpenResourceManager/LdapDelegate/LdapDelegate start
-ExecStop=/opt/OpenResourceManager/LdapDelegate/LdapDelegate stop
+ExecStart=/bin/bash -c 'exec /usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate start'
+ExecStop=/bin/bash -c 'exec /usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate stop'
 WorkingDirectory=/opt/OpenResourceManager/LdapDelegate
 PIDFile=/var/run/ldap-delegate.pid
 Restart=on-failure
