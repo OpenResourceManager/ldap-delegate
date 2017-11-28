@@ -10,7 +10,6 @@
 ### END INIT INFO
 
 dir="/opt/OpenResourceManager/LdapDelegate"
-user="root"
 
 name=`basename $0`
 pid_file="/var/run/ldap-delegate.pid"
@@ -30,11 +29,7 @@ case "$1" in
     else
         echo "Starting $name"
         cd "$dir"
-        if [ -z "$user" ]; then
-            sudo ./LdapDelegate start;
-        else
-            sudo -u "$user" ./LdapDelegate start;
-        fi
+        ./LdapDelegate start;
         echo $! > "$pid_file"
         if ! is_running; then
             exit 1
@@ -45,11 +40,7 @@ case "$1" in
     if is_running; then
         echo -n "Stopping $name.."
         cd "$dir"
-        if [ -z "$user" ]; then
-            sudo ./LdapDelegate stop;
-        else
-            sudo -u "$user" ./LdapDelegate stop;
-        fi
+        sudo ./LdapDelegate stop;
         kill `get_pid`
         for i in 1 2 3 4 5 6 7 8 9 10
         # for i in `seq 10`
