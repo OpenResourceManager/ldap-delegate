@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ### BEGIN INIT INFO
 # Provides:          ORM LDAP Delegate Service
 # Required-Start:    $remote_fs $syslog
@@ -10,14 +10,10 @@
 ### END INIT INFO
 
 dir="/opt/OpenResourceManager/LdapDelegate"
-cmd="/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate start"
-stopCMD="/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate stop"
 user="root"
 
 name=`basename $0`
 pid_file="/var/run/ldap-delegate.pid"
-stdout_log="/var/log/orm/LdapDelegate/$name.log"
-stderr_log="/var/log/orm/LdapDelegate/$name.err.log"
 
 get_pid() {
     cat "$pid_file"
@@ -35,13 +31,12 @@ case "$1" in
         echo "Starting $name"
         cd "$dir"
         if [ -z "$user" ]; then
-            sudo $cmd >> "$stdout_log" 2>> "$stderr_log"
+            sudo ./LdapDelegate start;
         else
-            sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log"
+            sudo -u "$user" ./LdapDelegate start;
         fi
         echo $! > "$pid_file"
         if ! is_running; then
-            echo "Unable to start, see $stdout_log and $stderr_log"
             exit 1
         fi
     fi
@@ -51,9 +46,9 @@ case "$1" in
         echo -n "Stopping $name.."
         cd "$dir"
         if [ -z "$user" ]; then
-            sudo "$stopCMD" >> "$stdout_log" 2>> "$stderr_log"
+            sudo ./LdapDelegate stop;
         else
-            sudo -u "$user" "$stopCMD" >> "$stdout_log" 2>> "$stderr_log"
+            sudo -u "$user" ./LdapDelegate stop;
         fi
         kill `get_pid`
         for i in 1 2 3 4 5 6 7 8 9 10
