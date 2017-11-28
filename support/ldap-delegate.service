@@ -2,14 +2,16 @@
 Description=ORM LDAP Delegate Service
 After=multi-user.target
 After=network.target
+After=syslog.target
 
 [Service]
 Type=simple
 ExecStart=/opt/OpenResourceManager/LdapDelegate/LdapDelegate
 Restart=on-error
 RestartSec=2
-StandardOutput=/var/log/orm/LdapDelegate/run.log
-StandardError=/var/log/orm/LdapDelegate/error.log
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=ldap-delegate
 
 [Install]
 WantedBy=multi-user.target
