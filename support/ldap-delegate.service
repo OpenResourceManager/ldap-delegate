@@ -4,13 +4,13 @@ After=multi-user.target
 After=network.target
 
 [Service]
-Type=forking
-ExecStart=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate start
-ExecStop=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate stop
+Type=simple
+ExecStart=/opt/OpenResourceManager/LdapDelegate/LdapDelegate
 PIDFile=/var/run/ldap-delegate.pid
-WorkingDirectory=/opt/OpenResourceManager/LdapDelegate/
 Restart=on-error
 RestartSec=2
+StandardOutput=/var/log/orm/LdapDelegate/run.log
+StandardError=/var/log/orm/LdapDelegate/error.log
 
 [Install]
 WantedBy=multi-user.target
