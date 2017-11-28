@@ -136,7 +136,8 @@ class LdapDelegate:
         self.stop()
         self.start()
 
-    def load_config(self):
+    @staticmethod
+    def load_config():
         global HOST_NAME, DELEGATE_HOST, DELEGATE_PORT, BC_KEY
         c = read_config()
         config = c['general']
@@ -150,12 +151,14 @@ class LdapDelegate:
             raise KeyError('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
         BC_KEY = config['bc_key']
 
-    def connect_to_sio(self):
+    @staticmethod
+    def connect_to_sio():
         global IO
         write_log('Connecting...')
         IO = SocketIO(DELEGATE_HOST, DELEGATE_PORT, LoggingNamespace)
         write_log('Connected!')
 
+    @staticmethod
     def on_create_account(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -165,6 +168,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.new_account(account)
 
+    @staticmethod
     def on_update_account(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -174,6 +178,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.modify_account(account)
 
+    @staticmethod
     def on_delete_account(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -183,6 +188,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_account(account)
 
+    @staticmethod
     def on_restore_account(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -192,6 +198,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_account(account)
 
+    @staticmethod
     def on_create_duty(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -201,6 +208,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(duty, 'Duty')
 
+    @staticmethod
     def on_destroy_duty(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -210,6 +218,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(duty, 'Duty')
 
+    @staticmethod
     def on_restore_duty(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -219,6 +228,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(duty, 'Duty')
 
+    @staticmethod
     def on_create_campus(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -228,6 +238,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(campus, 'Campus')
 
+    @staticmethod
     def on_destroy_campus(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -237,6 +248,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(campus, 'Campus')
 
+    @staticmethod
     def on_restore_campus(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -246,6 +258,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(campus, 'Campus')
 
+    @staticmethod
     def on_create_building(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -255,6 +268,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(building, 'Building')
 
+    @staticmethod
     def on_destroy_building(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -264,6 +278,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(building, 'Building')
 
+    @staticmethod
     def on_restore_building(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -273,6 +288,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(building, 'Building')
 
+    @staticmethod
     def on_create_room(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -282,6 +298,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(room, 'Room')
 
+    @staticmethod
     def on_destroy_room(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -291,6 +308,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(room, 'Room')
 
+    @staticmethod
     def on_restore_room(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -300,6 +318,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(room, 'Room')
 
+    @staticmethod
     def on_create_department(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -309,6 +328,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(department, 'Department')
 
+    @staticmethod
     def on_destroy_department(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -318,6 +338,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(department, 'Department')
 
+    @staticmethod
     def on_restore_department(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -327,6 +348,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(department, 'Department')
 
+    @staticmethod
     def on_create_course(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -336,6 +358,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(course, 'Course')
 
+    @staticmethod
     def on_destroy_course(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -345,6 +368,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(course, 'Course')
 
+    @staticmethod
     def on_restore_course(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -354,6 +378,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(course, 'Course')
 
+    @staticmethod
     def on_create_school(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -363,6 +388,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.create_group(school, 'School')
 
+    @staticmethod
     def on_destroy_school(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -372,6 +398,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.delete_group(school, 'School')
 
+    @staticmethod
     def on_restore_school(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -381,6 +408,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.restore_group(school, 'School')
 
+    @staticmethod
     def on_course_account_assignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -392,6 +420,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, course, 'Course')
 
+    @staticmethod
     def on_course_account_unassignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -403,6 +432,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, course, 'Course')
 
+    @staticmethod
     def on_department_account_assignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -414,6 +444,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, department, 'Department')
 
+    @staticmethod
     def on_department_account_unassignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -425,6 +456,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, department, 'Department')
 
+    @staticmethod
     def on_duty_account_assignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -436,6 +468,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, duty, 'Duty')
 
+    @staticmethod
     def on_duty_account_unassignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -447,6 +480,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, duty, 'Duty')
 
+    @staticmethod
     def on_room_account_assignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -458,6 +492,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, room, 'Room')
 
+    @staticmethod
     def on_room_account_unassignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -469,6 +504,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, room, 'Room')
 
+    @staticmethod
     def on_school_account_assignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
@@ -480,6 +516,7 @@ class LdapDelegate:
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, school, 'School')
 
+    @staticmethod
     def on_school_account_unassignment(*args):
         for arg in args:
             message = read_encrypted_message(arg, BC_KEY)
