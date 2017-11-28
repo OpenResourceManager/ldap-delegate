@@ -6,7 +6,6 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=/opt/OpenResourceManager/LdapDelegate/LdapDelegate
-PIDFile=/var/run/ldap-delegate.pid
 Restart=on-error
 RestartSec=2
 StandardOutput=/var/log/orm/LdapDelegate/run.log
