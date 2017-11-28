@@ -1,0 +1,16 @@
+[Unit]
+Description=ORM LDAP Delegate Service
+After=multi-user.target
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate start
+ExecStop=/usr/bin/python /opt/OpenResourceManager/LdapDelegate/LdapDelegate stop
+PIDFile=/var/run/ldap-delegate.pid
+WorkingDirectory=/opt/OpenResourceManager/LdapDelegate/
+Restart=on-error
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
