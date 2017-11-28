@@ -35,9 +35,9 @@ case "$1" in
         echo "Starting $name"
         cd "$dir"
         if [ -z "$user" ]; then
-            sudo $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo $cmd >> "$stdout_log" 2>> "$stderr_log"
         else
-            sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log"
         fi
         echo $! > "$pid_file"
         if ! is_running; then
@@ -51,9 +51,9 @@ case "$1" in
         echo -n "Stopping $name.."
         cd "$dir"
         if [ -z "$user" ]; then
-            sudo "$stopCMD" >> "$stdout_log" 2>> "$stderr_log" &
+            sudo "$stopCMD" >> "$stdout_log" 2>> "$stderr_log"
         else
-            sudo -u "$user" "$stopCMD" >> "$stdout_log" 2>> "$stderr_log" &
+            sudo -u "$user" "$stopCMD" >> "$stdout_log" 2>> "$stderr_log"
         fi
         kill `get_pid`
         for i in 1 2 3 4 5 6 7 8 9 10
