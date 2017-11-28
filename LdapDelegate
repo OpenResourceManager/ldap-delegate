@@ -1,4 +1,4 @@
-#!/usr/bin/python -p
+#!/usr/bin/python -u
 from __future__ import print_function
 from socketIO_client import SocketIO, LoggingNamespace
 from includes.AdManager import AdManager
