@@ -6,7 +6,7 @@ After=syslog.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c 'exec /opt/OpenResourceManager/LdapDelegate/LdapDelegate > >(/usr/bin/tee -a /var/log/orm/LdapDelegate/run.log) 2> >(/usr/bin/tee -a /var/log/orm/LdapDelegate/error.log >&2)'
+ExecStart=/bin/bash -c 'exec /opt/OpenResourceManager/LdapDelegate/ldap-delegate > >(/usr/bin/tee -a /var/log/orm/LdapDelegate/run.log) 2> >(/usr/bin/tee -a /var/log/orm/LdapDelegate/error.log >&2)'
 Restart=always
 RestartSec=2
 StandardOutput=syslog
