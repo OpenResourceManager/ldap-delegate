@@ -139,7 +139,8 @@ def form_user(account, mail_domain, home_share_path, home_drive_letter='H'):
         'sAMAccountName': str(account['username']),
         'initials': build_initials(account),
         'userAccountControl': '514',
-        'objectClass': ['top', 'organizationalPerson', 'person', 'user']
+        'objectClass': ['top', 'organizationalPerson', 'person', 'user'],
+        'userPrincipalName': str(account['username']) + '@' + str(mail_domain)
     }
 
 
