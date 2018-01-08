@@ -19,7 +19,7 @@ def write_log(message):
 
 
 def write_json_log(message):
-    sys.stdout.write(dumps(message))
+    sys.stdout.write(dumps(message) + "\n")
 
 
 def write_error(message):
