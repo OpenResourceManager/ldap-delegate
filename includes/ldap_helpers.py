@@ -1,7 +1,5 @@
 import ldap
-import json
-from includes.helpers import write_error
-from includes.helpers import write_log
+from includes.helpers import write_error, write_json_log
 from ldap import modlist
 
 
@@ -19,13 +17,13 @@ def connect(bind_user, bind_pass, hosts):
         except ldap.LDAPError, error_message:
             message = ''.join(["Error connecting to LDAP server: ", host, ' ', str(error_message)])
             write_error(message)
-    write_log(json.dumps({
+    write_json_log({
         'action': 'connect_ldap',
         'bind_user': bind_user,
         'hosts': hosts,
         'connection': connection,
         'message': 'Successfully connected to LDAP.'
-    }))
+    })
     return connection
 
 
@@ -225,14 +223,14 @@ def perform_search(ldap_filter, base_dn, connection, attributes):
         if not results[0][0]:
             return False
         else:
-            write_log(json.dumps({
+            write_json_log({
                 'action': 'perform_search',
                 'ldap_filter': ldap_filter,
                 'base_dn': base_dn,
                 'attributes': attributes,
                 'results': results,
                 'message': 'Successfully performed LDAP search.'
-            }))
+            })
             return results
     except ldap.LDAPError, error_message:
         message = ''.join(['Search error: ', str(error_message)])
@@ -242,12 +240,12 @@ def perform_search(ldap_filter, base_dn, connection, attributes):
 
 def create_object(dn, formed_object, connection):
     try:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'create_object',
             'formed_object': formed_object,
             'object': dn,
             'message': 'Creating object.'
-        }))
+        })
         return connection.add_s(dn, modlist.addModlist(formed_object))
     except ldap.LDAPError, error_message:
         message = ''.join(['Add error: ' + str(error_message)])
@@ -257,12 +255,12 @@ def create_object(dn, formed_object, connection):
 
 def modify_object(dn, action, connection):
     try:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'modify_object',
             'formed_action': action,
             'object': dn,
             'message': 'Modifying object.'
-        }))
+        })
         return connection.modify_s(dn, action)
     except ldap.LDAPError, error_message:
         message = ''.join(['Modify error: ' + str(error_message)])
@@ -272,11 +270,11 @@ def modify_object(dn, action, connection):
 
 def delete_object(dn, connection):
     try:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'delete_object',
             'object': dn,
             'message': 'Deleting object.'
-        }))
+        })
         return connection.delete_s(dn)
     except ldap.LDAPError, error_message:
         message = ''.join(['Delete error: ', str(error_message)])
@@ -286,13 +284,13 @@ def delete_object(dn, connection):
 
 def rename_object(current_dn, new_cn, new_ou, connection):
     try:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'rename_object',
             'current_dn': current_dn,
             'new_cn': new_cn,
             'new_ou': new_ou,
             'message': 'Renaming object.'
-        }))
+        })
         return connection.rename_s(current_dn, 'CN=' + new_cn, new_ou)
     except ldap.LDAPError, error_message:
         message = ''.join(['Rename error: ', str(error_message)])
@@ -304,12 +302,12 @@ def create_ou(cn, dn, connection):
     ou_object = form_ou(cn, dn)
     result = create_object(dn, ou_object, connection)
     if result:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'create_ou',
             'cn': cn,
             'dn': dn,
             'message': 'Creating OU.'
-        }))
+        })
         return result
     else:
         message = ''.join(['Error creating OU: ', dn])
@@ -322,7 +320,7 @@ def create_group(cn, dn, display_name, tree_base, connection):
     group_object = form_group(cn, dn, display_name)
     result = create_object(dn, group_object, connection)
     if result:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'create_group',
             'cn': cn,
             'dn': dn,
@@ -330,7 +328,7 @@ def create_group(cn, dn, display_name, tree_base, connection):
             'tree_base': tree_base,
             'result': result,
             'message': 'Creating group.'
-        }))
+        })
         return result
     else:
         message = ''.join(['Error creating Group: ', dn])
@@ -344,32 +342,32 @@ def delete_group(dn, tree_base, connection):
         result = delete_object(dn, connection)
         if not result:
             return False
-        write_log(json.dumps({
+        write_json_log({
             'action': 'delete_group',
             'dn': dn,
             'tree_base': tree_base,
             'result': result,
             'message': 'Deleted group.'
-        }))
+        })
     return True
 
 
 def set_password(dn, password, connection):
-    write_log(json.dumps({
+    write_json_log({
         'action': 'set_password',
         'dn': dn,
         'message': 'Reached set_password.'
-    }))
+    })
     unicode_passwd = build_unicode_password(password)
     set_password_action = form_set_password_action(unicode_passwd)
     result = modify_object(dn, set_password_action, connection)
     if result:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'set_password',
             'dn': dn,
             'result': result,
             'message': 'Successfully set password.'
-        }))
+        })
         return result
     else:
         message = ''.join(['Error setting password for: ', dn])
@@ -381,12 +379,12 @@ def enable_account(dn, connection):
     enable_account_action = form_set_account_control_action('512')
     result = modify_object(dn, enable_account_action, connection)
     if result:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'enable_account',
             'dn': dn,
             'result': result,
             'message': 'Successfully enabled account.'
-        }))
+        })
         return result
     else:
         message = ''.join(['Error enabling account: ', dn])
@@ -398,12 +396,12 @@ def disable_account(dn, connection):
     disable_account_action = form_set_account_control_action('514')
     result = modify_object(dn, disable_account_action, connection)
     if result:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'disable_account',
             'dn': dn,
             'result': result,
             'message': 'Successfully disabled account.'
-        }))
+        })
         return result
     else:
         message = ''.join(['Error disabling account: ', dn])
@@ -415,14 +413,14 @@ def check_group_membership(target_dn, group_dn, tree_base, connection):
     ldap_filter = '(&(distinguishedName=' + target_dn + ')(memberof=' + group_dn + '))'
     result = perform_search(ldap_filter, tree_base, connection, ['objectGUID'])
     if result:
-        write_log(json.dumps({
+        write_json_log({
             'action': 'check_group_membership',
             'target_dn': target_dn,
             'group_dn': group_dn,
             'tree_base': tree_base,
             'result': result,
             'message': 'Successfully checked group membership.'
-        }))
+        })
         return True
     else:
         return False
@@ -433,14 +431,14 @@ def add_to_group(target_dn, group_dn, tree_base, connection):
         add_member = form_add_member_action(target_dn)
         result = modify_object(group_dn, add_member, connection)
         if result:
-            write_log(json.dumps({
+            write_json_log({
                 'action': 'add_to_group',
                 'target_dn': target_dn,
                 'group_dn': group_dn,
                 'tree_base': tree_base,
                 'result': result,
                 'message': 'Successfully set group membership.'
-            }))
+            })
             return result
         else:
             message = ''.join(['Error adding ', target_dn, ' to Group: ', group_dn])
@@ -454,14 +452,14 @@ def remove_from_group(target_dn, group_dn, tree_base, connection):
         del_member = form_del_member_action(target_dn)
         result = modify_object(group_dn, del_member, connection)
         if result:
-            write_log(json.dumps({
+            write_json_log({
                 'action': 'remove_from_group',
                 'target_dn': target_dn,
                 'group_dn': group_dn,
                 'tree_base': tree_base,
                 'result': result,
                 'message': 'Successfully removed group membership.'
-            }))
+            })
             return result
         else:
             message = ''.join(['Error removing ', target_dn, ' from Group: ', group_dn])

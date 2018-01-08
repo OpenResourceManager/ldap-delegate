@@ -1,5 +1,5 @@
 from yaml import load
-from json import loads
+from json import loads, dumps
 from datetime import datetime
 from Crypto.Cipher import AES
 import base64
@@ -16,6 +16,10 @@ def read_config():
 
 def write_log(message):
     sys.stdout.write(''.join(['[', str(datetime.now()), '] ', message, "\n"]))
+
+
+def write_json_log(message):
+    sys.stdout.write(dumps(message))
 
 
 def write_error(message):
