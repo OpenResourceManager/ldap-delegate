@@ -21,7 +21,6 @@ def connect(bind_user, bind_pass, hosts):
         'action': 'connect_ldap',
         'bind_user': bind_user,
         'hosts': hosts,
-        'connection': connection,
         'message': 'Successfully connected to LDAP.'
     })
     return connection
@@ -228,7 +227,6 @@ def perform_search(ldap_filter, base_dn, connection, attributes):
                 'ldap_filter': ldap_filter,
                 'base_dn': base_dn,
                 'attributes': attributes,
-                'results': results,
                 'message': 'Successfully performed LDAP search.'
             })
             return results
@@ -326,7 +324,6 @@ def create_group(cn, dn, display_name, tree_base, connection):
             'dn': dn,
             'display_name': display_name,
             'tree_base': tree_base,
-            'result': result,
             'message': 'Creating group.'
         })
         return result
@@ -346,7 +343,6 @@ def delete_group(dn, tree_base, connection):
             'action': 'delete_group',
             'dn': dn,
             'tree_base': tree_base,
-            'result': result,
             'message': 'Deleted group.'
         })
     return True
@@ -365,7 +361,6 @@ def set_password(dn, password, connection):
         write_json_log({
             'action': 'set_password',
             'dn': dn,
-            'result': result,
             'message': 'Successfully set password.'
         })
         return result
@@ -382,7 +377,6 @@ def enable_account(dn, connection):
         write_json_log({
             'action': 'enable_account',
             'dn': dn,
-            'result': result,
             'message': 'Successfully enabled account.'
         })
         return result
@@ -399,7 +393,6 @@ def disable_account(dn, connection):
         write_json_log({
             'action': 'disable_account',
             'dn': dn,
-            'result': result,
             'message': 'Successfully disabled account.'
         })
         return result
@@ -418,7 +411,6 @@ def check_group_membership(target_dn, group_dn, tree_base, connection):
             'target_dn': target_dn,
             'group_dn': group_dn,
             'tree_base': tree_base,
-            'result': result,
             'message': 'Successfully checked group membership.'
         })
         return True
@@ -436,7 +428,6 @@ def add_to_group(target_dn, group_dn, tree_base, connection):
                 'target_dn': target_dn,
                 'group_dn': group_dn,
                 'tree_base': tree_base,
-                'result': result,
                 'message': 'Successfully set group membership.'
             })
             return result
@@ -457,7 +448,6 @@ def remove_from_group(target_dn, group_dn, tree_base, connection):
                 'target_dn': target_dn,
                 'group_dn': group_dn,
                 'tree_base': tree_base,
-                'result': result,
                 'message': 'Successfully removed group membership.'
             })
             return result
