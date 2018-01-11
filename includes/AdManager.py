@@ -13,21 +13,21 @@ class AdManager(object):
             'action': 'new_account',
             'account': account,
             'message': 'Creating account: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         if create_or_modify_account(account, self.connection, self.tree_base, self.settings):
             write_json_log({
                 'action': 'new_account_success',
                 'account': account,
                 'message': 'Created account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
                 'action': 'new_account_fail',
                 'account': account,
                 'message': 'Failed to create account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def modify_account(self, account):
@@ -35,21 +35,21 @@ class AdManager(object):
             'action': 'modify_account',
             'account': account,
             'message': 'Modifying account: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         if create_or_modify_account(account, self.connection, self.tree_base, self.settings):
             write_json_log({
                 'action': 'modify_account_success',
                 'account': account,
                 'message': 'Modified account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
                 'action': 'modify_account_fail',
                 'account': account,
                 'message': 'Failed to modify account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def restore_account(self, account):
@@ -57,14 +57,14 @@ class AdManager(object):
             'action': 'restore_account',
             'account': account,
             'message': 'Restoring account: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         if create_or_modify_account(account, self.connection, self.tree_base, self.settings):
             write_json_log({
                 'action': 'restore_account_success',
                 'account': account,
                 'message': 'Restored account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'information'
+                'log-type': 'information'
             })
             self.enable_account(account)
         else:
@@ -72,7 +72,7 @@ class AdManager(object):
                 'action': 'restore_account_fail',
                 'account': account,
                 'message': 'Failed to restore account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def delete_account(self, account):
@@ -80,21 +80,21 @@ class AdManager(object):
             'action': 'delete_account',
             'account': account,
             'message': 'Deleting/Disabling account: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         if delete_or_disable_account(account, self.connection, self.settings):
             write_json_log({
                 'action': 'delete_account_success',
                 'account': account,
                 'message': 'Deleted/Disabled account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
                 'action': 'delete_account_fail',
                 'account': account,
                 'message': 'Failed to delete/disable account: ' + account['username'] + ' - ' + account['identifier'],
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def enable_account(self, account):
@@ -102,7 +102,7 @@ class AdManager(object):
             'action': 'enable_account',
             'account': account,
             'message': 'Enabling account: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
@@ -112,14 +112,14 @@ class AdManager(object):
                     'action': 'enable_account_success',
                     'account': account,
                     'message': 'Enabled account: ' + account['username'] + ' - ' + account['identifier'],
-                    'level': 'information'
+                    'log-type': 'information'
                 })
             else:
                 write_json_error({
                     'action': 'enable_account_fail',
                     'account': account,
                     'message': 'Failed to enable account: ' + account['username'] + ' - ' + account['identifier'],
-                    'level': 'warning'
+                    'log-type': 'warning'
                 })
 
     def disable_account(self, account):
@@ -127,7 +127,7 @@ class AdManager(object):
             'action': 'disable_account',
             'account': account,
             'message': 'Disable account: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
@@ -137,14 +137,14 @@ class AdManager(object):
                     'action': 'disable_account_success',
                     'account': account,
                     'message': 'Disabled account: ' + account['username'] + ' - ' + account['identifier'],
-                    'level': 'information'
+                    'log-type': 'information'
                 })
             else:
                 write_json_error({
                     'action': 'disable_account_fail',
                     'account': account,
                     'message': 'Failed to disable account: ' + account['username'] + ' - ' + account['identifier'],
-                    'level': 'warning'
+                    'log-type': 'warning'
                 })
 
     def change_account_password(self, account):
@@ -152,7 +152,7 @@ class AdManager(object):
             'action': 'change_account_password',
             'account': account,
             'message': 'Changing account password: ' + account['username'] + ' - ' + account['identifier'],
-            'level': 'information'
+            'log-type': 'information'
         })
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
@@ -162,7 +162,7 @@ class AdManager(object):
                     'action': 'change_account_password_success',
                     'account': account,
                     'message': 'Changing account password: ' + account['username'] + ' - ' + account['identifier'],
-                    'level': 'information'
+                    'log-type': 'information'
                 })
             else:
                 write_json_error({
@@ -170,7 +170,7 @@ class AdManager(object):
                     'account': account,
                     'message': 'Failed to change account password: ' + account['username'] + ' - ' + account[
                         'identifier'],
-                    'level': 'warning'
+                    'log-type': 'warning'
                 })
 
     def create_group(self, group, group_type):
@@ -179,7 +179,7 @@ class AdManager(object):
             'group': group,
             'group_type': group_type,
             'message': 'Creating group',
-            'level': 'information'
+            'log-type': 'information'
         })
         group_cn = build_group_cn(group)
         group_dn = build_group_dn(group_cn, group_type, self.settings['base_group_ou_dn'])
@@ -191,7 +191,7 @@ class AdManager(object):
                 'group_cn': group_cn,
                 'group_dn': group_dn,
                 'message': 'Created group',
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
@@ -201,7 +201,7 @@ class AdManager(object):
                 'group_cn': group_cn,
                 'group_dn': group_dn,
                 'message': 'Failed to create group',
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def restore_group(self, group, group_type):
@@ -210,7 +210,7 @@ class AdManager(object):
             'group': group,
             'group_type': group_type,
             'message': 'Restoring group',
-            'level': 'information'
+            'log-type': 'information'
         })
         group_cn = build_group_cn(group)
         group_dn = build_group_dn(group_cn, group_type, self.settings['base_group_ou_dn'])
@@ -222,7 +222,7 @@ class AdManager(object):
                 'group_cn': group_cn,
                 'group_dn': group_dn,
                 'message': 'Restored group',
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
@@ -232,7 +232,7 @@ class AdManager(object):
                 'group_cn': group_cn,
                 'group_dn': group_dn,
                 'message': 'Failed to restore group',
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def delete_group(self, group, group_type):
@@ -241,7 +241,7 @@ class AdManager(object):
             'group': group,
             'group_type': group_type,
             'message': 'Deleting group',
-            'level': 'information'
+            'log-type': 'information'
         })
         group_cn = build_group_cn(group)
         group_dn = build_group_dn(group_cn, group_type, self.settings['base_group_ou_dn'])
@@ -253,7 +253,7 @@ class AdManager(object):
                 'group_cn': group_cn,
                 'group_dn': group_dn,
                 'message': 'Deleted group',
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
@@ -263,7 +263,7 @@ class AdManager(object):
                 'group_cn': group_cn,
                 'group_dn': group_dn,
                 'message': 'Failed to delete group',
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def add_account_to_group(self, account, group, group_type):
@@ -273,7 +273,7 @@ class AdManager(object):
             'group': group,
             'group_type': group_type,
             'message': 'Adding account to group',
-            'level': 'information'
+            'log-type': 'information'
         })
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
@@ -294,7 +294,7 @@ class AdManager(object):
                     'group_dn': group_dn,
                     'message': 'Added account to group: ' + account['username'] + ' - ' + account[
                         'identifier'] + ' -->> ' + group_cn,
-                    'level': 'information'
+                    'log-type': 'information'
                 })
             else:
                 write_json_error({
@@ -307,7 +307,7 @@ class AdManager(object):
                     'group_dn': group_dn,
                     'message': 'Failed to add account to group: ' + account['username'] + ' - ' + account[
                         'identifier'] + ' --!! ' + group_cn,
-                    'level': 'warning'
+                    'log-type': 'warning'
                 })
 
     def remove_account_from_group(self, account, group, group_type):
@@ -317,7 +317,7 @@ class AdManager(object):
             'group': group,
             'group_type': group_type,
             'message': 'Removing account from group',
-            'level': 'information'
+            'log-type': 'information'
         })
         result = get_user_by_identifier(account['identifier'], self.tree_base, self.connection)
         if result:
@@ -338,7 +338,7 @@ class AdManager(object):
                     'group_dn': group_dn,
                     'message': 'Removed account from group: ' + account['username'] + ' - ' + account[
                         'identifier'] + ' ---- ' + group_cn,
-                    'level': 'information'
+                    'log-type': 'information'
                 })
             else:
                 write_json_error({
@@ -351,7 +351,7 @@ class AdManager(object):
                     'group_dn': group_dn,
                     'message': 'Failed to remove account from group: ' + account['username'] + ' - ' + account[
                         'identifier'] + ' --!! ' + group_cn,
-                    'level': 'warning'
+                    'log-type': 'warning'
                 })
 
     def add_group_to_group(self, target_group, target_group_type, des_group, des_group_type):
@@ -362,7 +362,7 @@ class AdManager(object):
             'des_group': des_group,
             'des_group_type': des_group_type,
             'message': 'Adding group to group',
-            'level': 'information'
+            'log-type': 'information'
         })
         # Build the DNs
         target_group_dn = build_group_dn(build_group_cn(target_group), target_group_type,
@@ -387,7 +387,7 @@ class AdManager(object):
                 'des_group': des_group,
                 'des_group_type': des_group_type,
                 'message': 'Added group to group',
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
@@ -397,7 +397,7 @@ class AdManager(object):
                 'des_group': des_group,
                 'des_group_type': des_group_type,
                 'message': 'Failed to add group to group',
-                'level': 'warning'
+                'log-type': 'warning'
             })
 
     def remove_group_from_group(self, target_group, target_group_type, des_group, des_group_type):
@@ -408,7 +408,7 @@ class AdManager(object):
             'des_group': des_group,
             'des_group_type': des_group_type,
             'message': 'Removing group from group',
-            'level': 'information'
+            'log-type': 'information'
         })
         target_group_dn = build_group_dn(build_group_cn(target_group), target_group_type,
                                          self.settings['base_group_ou_dn'])
@@ -421,7 +421,7 @@ class AdManager(object):
                 'des_group': des_group,
                 'des_group_type': des_group_type,
                 'message': 'Removed group from group',
-                'level': 'information'
+                'log-type': 'information'
             })
         else:
             write_json_error({
@@ -431,5 +431,5 @@ class AdManager(object):
                 'des_group': des_group,
                 'des_group_type': des_group_type,
                 'message': 'Failed to remove group from group',
-                'level': 'warning'
+                'log-type': 'warning'
             })

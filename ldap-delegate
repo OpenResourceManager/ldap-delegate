@@ -29,14 +29,14 @@ class LdapDelegate:
                 write_json_error({
                     'action': 'load_config',
                     'message': 'You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`',
-                    'level': 'fatal'
+                    'log-type': 'fatal'
                 })
                 raise Exception('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
         except KeyError:
             write_json_error({
                 'action': 'load_config',
                 'message': 'You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`',
-                'level': 'fatal'
+                'log-type': 'fatal'
             })
             raise KeyError('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
         BC_KEY = config['bc_key']
@@ -49,7 +49,7 @@ class LdapDelegate:
             'DELEGATE_HOST': DELEGATE_HOST,
             'DELEGATE_PORT': DELEGATE_PORT,
             'message': 'Connecting to Event Delegate Server...',
-            'level': 'information'
+            'log-type': 'information'
         })
         IO = SocketIO(DELEGATE_HOST, DELEGATE_PORT, LoggingNamespace)
         write_json_log({
@@ -57,7 +57,7 @@ class LdapDelegate:
             'DELEGATE_HOST': DELEGATE_HOST,
             'DELEGATE_PORT': DELEGATE_PORT,
             'message': 'Connected to Event Delegate Server!',
-            'level': 'information'
+            'log-type': 'information'
         })
 
     @staticmethod
@@ -434,26 +434,26 @@ class LdapDelegate:
         write_json_log({
             'action': 'run',
             'message': 'Starting...',
-            'level': 'information'
+            'log-type': 'information'
         })
         # Load the configuration
         write_json_log({
             'action': 'run',
             'message': 'Loading configuration...',
-            'level': 'information'
+            'log-type': 'information'
         })
         self.load_config()
         # Connect to the server
         write_json_log({
             'action': 'run',
             'message': 'Connecting to SIO...',
-            'level': 'information'
+            'log-type': 'information'
         })
         self.connect_to_sio()
         write_json_log({
             'action': 'run',
             'message': 'Initializing IO handlers...',
-            'level': 'information'
+            'log-type': 'information'
         })
         # Emmit that we're here
         IO.emit('join', {'hostname': HOST_NAME})
@@ -500,7 +500,7 @@ class LdapDelegate:
         write_json_log({
             'action': 'run',
             'message': 'Startup complete! Waiting for events...',
-            'level': 'information'
+            'log-type': 'information'
         })
         # Hang out
         IO.wait()

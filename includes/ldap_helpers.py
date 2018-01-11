@@ -1,9 +1,16 @@
 import ldap
-from includes.helpers import write_error, write_json_log
+from includes.helpers import write_json_log, write_error
 from ldap import modlist
 
 
 def connect(bind_user, bind_pass, hosts):
+    write_json_log({
+        'action': 'connect_ldap',
+        'bind_user': bind_user,
+        'hosts': hosts,
+        'message': 'Connecting to LDAP',
+        'log-type': 'information'
+    })
     connection = False
     for host in hosts:
         try:
@@ -13,15 +20,31 @@ def connect(bind_user, bind_pass, hosts):
             connection = ldap.initialize('ldaps://' + host + ':636')
             connection.simple_bind_s(bind_user, bind_pass)
             if connection:
+                write_json_log({
+                    'action': 'connect_ldap_success',
+                    'bind_user': bind_user,
+                    'hosts': hosts,
+                    'host': host,
+                    'message': 'Successfully connected to LDAP host: ' + host,
+                    'log-type': 'information'
+                })
                 return connection
         except ldap.LDAPError, error_message:
-            message = ''.join(["Error connecting to LDAP server: ", host, ' ', str(error_message)])
-            write_error(message)
+            write_json_log({
+                'action': 'connect_ldap_error',
+                'bind_user': bind_user,
+                'hosts': hosts,
+                'host': host,
+                'error_message': str(error_message),
+                'message': 'Error connecting to LDAP server: ' + host,
+                'log-type': 'error'
+            })
     write_json_log({
-        'action': 'connect_ldap',
+        'action': 'connect_ldap_success',
         'bind_user': bind_user,
         'hosts': hosts,
-        'message': 'Successfully connected to LDAP.'
+        'message': 'Successfully connected to LDAP.',
+        'log-type': 'information'
     })
     return connection
 
@@ -227,7 +250,8 @@ def perform_search(ldap_filter, base_dn, connection, attributes):
                 'ldap_filter': ldap_filter,
                 'base_dn': base_dn,
                 'attributes': attributes,
-                'message': 'Successfully performed LDAP search.'
+                'message': 'Successfully performed LDAP search.',
+                'log-type': 'information'
             })
             return results
     except ldap.LDAPError, error_message:
@@ -242,7 +266,8 @@ def create_object(dn, formed_object, connection):
             'action': 'create_object',
             'formed_object': formed_object,
             'object': dn,
-            'message': 'Creating object.'
+            'message': 'Creating object.',
+            'log-type': 'information'
         })
         return connection.add_s(dn, modlist.addModlist(formed_object))
     except ldap.LDAPError, error_message:
@@ -257,7 +282,8 @@ def modify_object(dn, action, connection):
             'action': 'modify_object',
             'formed_action': action,
             'object': dn,
-            'message': 'Modifying object.'
+            'message': 'Modifying object.',
+            'log-type': 'information'
         })
         return connection.modify_s(dn, action)
     except ldap.LDAPError, error_message:
@@ -271,7 +297,8 @@ def delete_object(dn, connection):
         write_json_log({
             'action': 'delete_object',
             'object': dn,
-            'message': 'Deleting object.'
+            'message': 'Deleting object.',
+            'log-type': 'information'
         })
         return connection.delete_s(dn)
     except ldap.LDAPError, error_message:
@@ -287,7 +314,8 @@ def rename_object(current_dn, new_cn, new_ou, connection):
             'current_dn': current_dn,
             'new_cn': new_cn,
             'new_ou': new_ou,
-            'message': 'Renaming object.'
+            'message': 'Renaming object.',
+            'log-type': 'information'
         })
         return connection.rename_s(current_dn, 'CN=' + new_cn, new_ou)
     except ldap.LDAPError, error_message:
@@ -304,7 +332,8 @@ def create_ou(cn, dn, connection):
             'action': 'create_ou',
             'cn': cn,
             'dn': dn,
-            'message': 'Creating OU.'
+            'message': 'Creating OU.',
+            'log-type': 'information'
         })
         return result
     else:
@@ -324,7 +353,8 @@ def create_group(cn, dn, display_name, tree_base, connection):
             'dn': dn,
             'display_name': display_name,
             'tree_base': tree_base,
-            'message': 'Creating group.'
+            'message': 'Creating group.',
+            'log-type': 'information'
         })
         return result
     else:
@@ -343,7 +373,8 @@ def delete_group(dn, tree_base, connection):
             'action': 'delete_group',
             'dn': dn,
             'tree_base': tree_base,
-            'message': 'Deleted group.'
+            'message': 'Deleted group.',
+            'log-type': 'information'
         })
     return True
 
@@ -352,7 +383,8 @@ def set_password(dn, password, connection):
     write_json_log({
         'action': 'set_password',
         'dn': dn,
-        'message': 'Reached set_password.'
+        'message': 'Reached set_password.',
+        'log-type': 'information'
     })
     unicode_passwd = build_unicode_password(password)
     set_password_action = form_set_password_action(unicode_passwd)
@@ -361,7 +393,8 @@ def set_password(dn, password, connection):
         write_json_log({
             'action': 'set_password',
             'dn': dn,
-            'message': 'Successfully set password.'
+            'message': 'Successfully set password.',
+            'log-type': 'information'
         })
         return result
     else:
@@ -377,7 +410,8 @@ def enable_account(dn, connection):
         write_json_log({
             'action': 'enable_account',
             'dn': dn,
-            'message': 'Successfully enabled account.'
+            'message': 'Successfully enabled account.',
+            'log-type': 'information'
         })
         return result
     else:
@@ -393,7 +427,8 @@ def disable_account(dn, connection):
         write_json_log({
             'action': 'disable_account',
             'dn': dn,
-            'message': 'Successfully disabled account.'
+            'message': 'Successfully disabled account.',
+            'log-type': 'information'
         })
         return result
     else:
@@ -411,7 +446,8 @@ def check_group_membership(target_dn, group_dn, tree_base, connection):
             'target_dn': target_dn,
             'group_dn': group_dn,
             'tree_base': tree_base,
-            'message': 'Successfully checked group membership.'
+            'message': 'Successfully checked group membership.',
+            'log-type': 'information'
         })
         return True
     else:
@@ -428,7 +464,8 @@ def add_to_group(target_dn, group_dn, tree_base, connection):
                 'target_dn': target_dn,
                 'group_dn': group_dn,
                 'tree_base': tree_base,
-                'message': 'Successfully set group membership.'
+                'message': 'Successfully set group membership.',
+                'log-type': 'information'
             })
             return result
         else:
@@ -448,7 +485,8 @@ def remove_from_group(target_dn, group_dn, tree_base, connection):
                 'target_dn': target_dn,
                 'group_dn': group_dn,
                 'tree_base': tree_base,
-                'message': 'Successfully removed group membership.'
+                'message': 'Successfully removed group membership.',
+                'log-type': 'information'
             })
             return result
         else:
