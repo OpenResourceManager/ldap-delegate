@@ -22,6 +22,10 @@ def write_json_log(message):
     sys.stdout.write(dumps(message) + "\n")
 
 
+def write_json_error(message):
+    sys.stderr.write(dumps(message) + "\n")
+
+
 def write_error(message):
     sys.stderr.write(''.join(['[', str(datetime.now()), '] ', message, "\n"]))
 

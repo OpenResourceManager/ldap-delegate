@@ -1,5 +1,5 @@
 from includes.ldap_helpers import *
-from includes.helpers import write_json_log
+from includes.helpers import write_json_log, write_json_error
 
 
 class AdManager(object):
@@ -23,7 +23,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'new_account_fail',
                 'account': account,
                 'message': 'Failed to create account: ' + account['username'] + ' - ' + account['identifier'],
@@ -45,7 +45,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'modify_account_fail',
                 'account': account,
                 'message': 'Failed to modify account: ' + account['username'] + ' - ' + account['identifier'],
@@ -68,7 +68,7 @@ class AdManager(object):
             })
             self.enable_account(account)
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'restore_account_fail',
                 'account': account,
                 'message': 'Failed to restore account: ' + account['username'] + ' - ' + account['identifier'],
@@ -90,7 +90,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'delete_account_fail',
                 'account': account,
                 'message': 'Failed to delete/disable account: ' + account['username'] + ' - ' + account['identifier'],
@@ -115,7 +115,7 @@ class AdManager(object):
                     'level': 'information'
                 })
             else:
-                write_json_log({
+                write_json_error({
                     'action': 'enable_account_fail',
                     'account': account,
                     'message': 'Failed to enable account: ' + account['username'] + ' - ' + account['identifier'],
@@ -140,7 +140,7 @@ class AdManager(object):
                     'level': 'information'
                 })
             else:
-                write_json_log({
+                write_json_error({
                     'action': 'disable_account_fail',
                     'account': account,
                     'message': 'Failed to disable account: ' + account['username'] + ' - ' + account['identifier'],
@@ -165,7 +165,7 @@ class AdManager(object):
                     'level': 'information'
                 })
             else:
-                write_json_log({
+                write_json_error({
                     'action': 'change_account_password_fail',
                     'account': account,
                     'message': 'Failed to change account password: ' + account['username'] + ' - ' + account[
@@ -194,7 +194,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'create_group_fail',
                 'group': group,
                 'group_type': group_type,
@@ -225,7 +225,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'restore_group_fail',
                 'group': group,
                 'group_type': group_type,
@@ -256,7 +256,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'delete_group_fail',
                 'group': group,
                 'group_type': group_type,
@@ -297,7 +297,7 @@ class AdManager(object):
                     'level': 'information'
                 })
             else:
-                write_json_log({
+                write_json_error({
                     'action': 'add_account_to_group_fail',
                     'account': account,
                     'account_dn': account_dn,
@@ -341,7 +341,7 @@ class AdManager(object):
                     'level': 'information'
                 })
             else:
-                write_json_log({
+                write_json_error({
                     'action': 'remove_account_from_group_fail',
                     'account': account,
                     'account_dn': account_dn,
@@ -390,7 +390,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'add_group_to_group_fail',
                 'target_group': target_group,
                 'target_group_type': target_group_type,
@@ -424,7 +424,7 @@ class AdManager(object):
                 'level': 'information'
             })
         else:
-            write_json_log({
+            write_json_error({
                 'action': 'remove_group_from_group_fail',
                 'target_group': target_group,
                 'target_group_type': target_group_type,

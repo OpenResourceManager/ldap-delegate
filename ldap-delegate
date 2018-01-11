@@ -2,7 +2,7 @@
 from __future__ import print_function
 from socketIO_client import SocketIO, LoggingNamespace
 from includes.AdManager import AdManager
-from includes.helpers import read_config, read_encrypted_message, write_log, write_error
+from includes.helpers import read_config, read_encrypted_message, write_json_error, write_json_log
 import socket
 
 IO = None
@@ -26,19 +26,39 @@ class LdapDelegate:
         DELEGATE_PORT = config['delegate_server_port']
         try:
             if not config['bc_key']:
-                write_error('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
+                write_json_error({
+                    'action': 'load_config',
+                    'message': 'You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`',
+                    'level': 'fatal'
+                })
                 raise Exception('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
         except KeyError:
-            write_error('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
+            write_json_error({
+                'action': 'load_config',
+                'message': 'You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`',
+                'level': 'fatal'
+            })
             raise KeyError('You have not provided a `bc_key` in your config file! Hint: `php artisan orm:bckey`')
         BC_KEY = config['bc_key']
 
     @staticmethod
     def connect_to_sio():
         global IO
-        write_log('Connecting to Event Delegate Server...')
+        write_json_log({
+            'action': 'connect_to_sio',
+            'DELEGATE_HOST': DELEGATE_HOST,
+            'DELEGATE_PORT': DELEGATE_PORT,
+            'message': 'Connecting to Event Delegate Server...',
+            'level': 'information'
+        })
         IO = SocketIO(DELEGATE_HOST, DELEGATE_PORT, LoggingNamespace)
-        write_log('Connected!')
+        write_json_log({
+            'action': 'connect_to_sio_success',
+            'DELEGATE_HOST': DELEGATE_HOST,
+            'DELEGATE_PORT': DELEGATE_PORT,
+            'message': 'Connected to Event Delegate Server!',
+            'level': 'information'
+        })
 
     @staticmethod
     def on_create_account(*args):
@@ -411,13 +431,30 @@ class LdapDelegate:
                 ad.remove_account_from_group(account, school, 'School')
 
     def run(self):
-        write_log('Starting...')
+        write_json_log({
+            'action': 'run',
+            'message': 'Starting...',
+            'level': 'information'
+        })
         # Load the configuration
-        write_log('Loading Config...')
+        write_json_log({
+            'action': 'run',
+            'message': 'Loading configuration...',
+            'level': 'information'
+        })
         self.load_config()
         # Connect to the server
+        write_json_log({
+            'action': 'run',
+            'message': 'Connecting to SIO...',
+            'level': 'information'
+        })
         self.connect_to_sio()
-        write_log('Initializing...')
+        write_json_log({
+            'action': 'run',
+            'message': 'Initializing IO handlers...',
+            'level': 'information'
+        })
         # Emmit that we're here
         IO.emit('join', {'hostname': HOST_NAME})
         # Account Listeners
@@ -460,7 +497,11 @@ class LdapDelegate:
         IO.on('room_account_unassignment', self.on_room_account_unassignment)
         IO.on('school_account_assignment', self.on_school_account_assignment)
         IO.on('school_account_unassignment', self.on_school_account_unassignment)
-        write_log('Waiting for events, startup complete!')
+        write_json_log({
+            'action': 'run',
+            'message': 'Startup complete! Waiting for events...',
+            'level': 'information'
+        })
         # Hang out
         IO.wait()
 
