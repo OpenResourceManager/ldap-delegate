@@ -67,6 +67,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             account = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.new_account(account)
 
@@ -77,6 +79,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             account = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.modify_account(account)
 
@@ -87,6 +91,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             account = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_account(account)
 
@@ -97,6 +103,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             account = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_account(account)
 
@@ -107,6 +115,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             duty = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(duty, 'Duty')
 
@@ -117,6 +127,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             duty = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(duty, 'Duty')
 
@@ -127,6 +139,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             duty = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(duty, 'Duty')
 
@@ -137,6 +151,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             campus = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(campus, 'Campus')
 
@@ -147,6 +163,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             campus = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(campus, 'Campus')
 
@@ -157,6 +175,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             campus = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(campus, 'Campus')
 
@@ -167,6 +187,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             building = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(building, 'Building')
 
@@ -177,6 +199,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             building = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(building, 'Building')
 
@@ -187,6 +211,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             building = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(building, 'Building')
 
@@ -197,6 +223,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             room = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(room, 'Room')
 
@@ -207,6 +235,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             room = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(room, 'Room')
 
@@ -217,6 +247,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             room = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(room, 'Room')
 
@@ -227,6 +259,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             department = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(department, 'Department')
 
@@ -237,6 +271,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             department = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(department, 'Department')
 
@@ -247,6 +283,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             department = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(department, 'Department')
 
@@ -257,6 +295,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             course = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(course, 'Course')
 
@@ -267,6 +307,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             course = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(course, 'Course')
 
@@ -277,6 +319,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             course = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(course, 'Course')
 
@@ -287,6 +331,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             school = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.create_group(school, 'School')
 
@@ -297,6 +343,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             school = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.delete_group(school, 'School')
 
@@ -307,6 +355,8 @@ class LdapDelegate:
             ldap_conf = message['conf']['ldap']
             school = message['data']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.restore_group(school, 'School')
 
@@ -319,6 +369,8 @@ class LdapDelegate:
             account = data['account']
             course = data['course']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, course, 'Course')
 
@@ -331,6 +383,8 @@ class LdapDelegate:
             account = data['account']
             course = data['course']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, course, 'Course')
 
@@ -343,6 +397,8 @@ class LdapDelegate:
             account = data['account']
             department = data['department']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, department, 'Department')
 
@@ -355,6 +411,8 @@ class LdapDelegate:
             account = data['account']
             department = data['department']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, department, 'Department')
 
@@ -367,6 +425,8 @@ class LdapDelegate:
             account = data['account']
             duty = data['duty']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, duty, 'Duty')
 
@@ -379,6 +439,8 @@ class LdapDelegate:
             account = data['account']
             duty = data['duty']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, duty, 'Duty')
 
@@ -391,6 +453,8 @@ class LdapDelegate:
             account = data['account']
             room = data['room']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, room, 'Room')
 
@@ -403,6 +467,8 @@ class LdapDelegate:
             account = data['account']
             room = data['room']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, room, 'Room')
 
@@ -415,6 +481,8 @@ class LdapDelegate:
             account = data['account']
             school = data['school']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.add_account_to_group(account, school, 'School')
 
@@ -427,6 +495,8 @@ class LdapDelegate:
             account = data['account']
             school = data['school']
             if ldap_conf['enabled']:
+                ldap_conf['domain'] = message['conf']['domain']
+                ldap_conf['email_domain'] = message['conf']['domain']['default_domain']
                 ad = AdManager(ldap_conf)
                 ad.remove_account_from_group(account, school, 'School')
 
