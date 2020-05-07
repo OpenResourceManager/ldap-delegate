@@ -1,7 +1,14 @@
 import ldap
 from includes.helpers import write_json_log, write_json_error
 from ldap import modlist
+import random
 
+def generate_password():
+    chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@£$%^&*().,?0123456789'
+    password = ''
+    for c in range(16):
+        password += random.choice(chars)
+    return password
 
 def connect(bind_user, bind_pass, hosts):
     write_json_log({
@@ -580,11 +587,14 @@ def create_account(account, connection, settings):
     new_account = form_user(account, settings['email_domain'], home_share_path, settings['home_drive_letter'])
     verify_parent_ou_exists(dn, settings['tree_base'], connection)
     if create_object(dn, new_account, connection):
-        # If we should propagate the password then set it
+        # If we should propagate the password then set it to a random password
         if account['should_propagate_password']:
-            set_password(dn, account['password'], connection)
+            set_password(dn, generate_password(), connection)
         # Enable the account
         enable_account(dn, connection)
+        # If we should propagate the password then set it to the desired password
+        if account['should_propagate_password']:
+            set_password(dn, account['password'], connection)
         # Add the account to a group based on it's primary duty
         add_account_to_primary_duty_group(
             dn,
