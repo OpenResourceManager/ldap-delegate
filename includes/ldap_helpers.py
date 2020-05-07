@@ -180,7 +180,8 @@ def form_user(account, mail_domain, home_share_path, home_drive_letter='H', with
             'userAccountControl': '514',
             'objectClass': ['top', 'organizationalPerson', 'person', 'user'],
             'userPrincipalName': str(account['username']) + '@' + str(mail_domain),
-            'userPassword': str(pwd)
+            'userPassword': str(pwd),
+            'unicodePwd': build_unicode_password(str(pwd))
         }
     else:
         return {
@@ -617,13 +618,13 @@ def create_account(account, connection, settings):
     verify_parent_ou_exists(dn, settings['tree_base'], connection)
     if create_object(dn, new_account, connection):
         # If we should propagate the password then set it to a random password
-        #if account['should_propagate_password']:
-            #set_password(dn, generate_password(), connection)
+        # if account['should_propagate_password']:
+        # set_password(dn, generate_password(), connection)
         # Enable the account
         enable_account(dn, connection)
         # If we should propagate the password then set it to the desired password
-        #if account['should_propagate_password']:
-            #set_password(dn, account['password'], connection)
+        # if account['should_propagate_password']:
+        # set_password(dn, account['password'], connection)
         # Add the account to a group based on it's primary duty
         add_account_to_primary_duty_group(
             dn,
