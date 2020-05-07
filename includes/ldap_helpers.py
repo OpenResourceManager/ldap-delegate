@@ -1,3 +1,4 @@
+# coding=utf-8
 import ldap
 from includes.helpers import write_json_log, write_json_error
 from ldap import modlist
