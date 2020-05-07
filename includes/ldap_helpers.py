@@ -4,12 +4,14 @@ from includes.helpers import write_json_log, write_json_error
 from ldap import modlist
 import random
 
+
 def generate_password():
     chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@£$%^&*().,?0123456789'
     password = ''
     for c in range(16):
         password += random.choice(chars)
     return password
+
 
 def connect(bind_user, bind_pass, hosts):
     write_json_log({
@@ -160,24 +162,44 @@ def form_middle_name(account):
     return ''
 
 
-def form_user(account, mail_domain, home_share_path, home_drive_letter='H'):
-    return {
-        'description': 'ID: ' + str(account['identifier']) + ' - automatically managed by ORM',
-        'displayName': str(account['name_full']),
-        'givenName': str(account['name_first'].capitalize()),
-        'middleName': form_middle_name(account),
-        'sn': str(account['name_last'].capitalize()),
-        'extensionName': build_account_ext_name(account),
-        'employeeID': str(account['identifier']),
-        'homeDirectory': str(home_share_path),
-        'homeDrive': str(home_drive_letter[0].upper()) + ':',
-        'mail': str(account['username']) + '@' + str(mail_domain),
-        'sAMAccountName': str(account['username']),
-        'initials': build_initials(account),
-        'userAccountControl': '514',
-        'objectClass': ['top', 'organizationalPerson', 'person', 'user'],
-        'userPrincipalName': str(account['username']) + '@' + str(mail_domain)
-    }
+def form_user(account, mail_domain, home_share_path, home_drive_letter='H', withpwd=False, pwd=''):
+    if withpwd:
+        return {
+            'description': 'ID: ' + str(account['identifier']) + ' - automatically managed by ORM',
+            'displayName': str(account['name_full']),
+            'givenName': str(account['name_first'].capitalize()),
+            'middleName': form_middle_name(account),
+            'sn': str(account['name_last'].capitalize()),
+            'extensionName': build_account_ext_name(account),
+            'employeeID': str(account['identifier']),
+            'homeDirectory': str(home_share_path),
+            'homeDrive': str(home_drive_letter[0].upper()) + ':',
+            'mail': str(account['username']) + '@' + str(mail_domain),
+            'sAMAccountName': str(account['username']),
+            'initials': build_initials(account),
+            'userAccountControl': '514',
+            'objectClass': ['top', 'organizationalPerson', 'person', 'user'],
+            'userPrincipalName': str(account['username']) + '@' + str(mail_domain),
+            'userPassword': str(pwd)
+        }
+    else:
+        return {
+            'description': 'ID: ' + str(account['identifier']) + ' - automatically managed by ORM',
+            'displayName': str(account['name_full']),
+            'givenName': str(account['name_first'].capitalize()),
+            'middleName': form_middle_name(account),
+            'sn': str(account['name_last'].capitalize()),
+            'extensionName': build_account_ext_name(account),
+            'employeeID': str(account['identifier']),
+            'homeDirectory': str(home_share_path),
+            'homeDrive': str(home_drive_letter[0].upper()) + ':',
+            'mail': str(account['username']) + '@' + str(mail_domain),
+            'sAMAccountName': str(account['username']),
+            'initials': build_initials(account),
+            'userAccountControl': '514',
+            'objectClass': ['top', 'organizationalPerson', 'person', 'user'],
+            'userPrincipalName': str(account['username']) + '@' + str(mail_domain)
+        }
 
 
 def form_group(cn, dn, display_name):
@@ -585,17 +607,23 @@ def create_account(account, connection, settings):
     dn = build_account_dn(account['username'], ou)
     primary_duty_group_dn = build_group_dn(account['primary_duty']['code'], 'Duty', settings['base_group_ou_dn'])
     home_share_path = build_home_share_path(account, settings['home_drive_path_pattern'])
-    new_account = form_user(account, settings['email_domain'], home_share_path, settings['home_drive_letter'])
+
+    if account['should_propagate_password']:
+        new_account = form_user(account, settings['email_domain'], home_share_path, settings['home_drive_letter'], True,
+                                account['password'])
+    else:
+        new_account = form_user(account, settings['email_domain'], home_share_path, settings['home_drive_letter'])
+
     verify_parent_ou_exists(dn, settings['tree_base'], connection)
     if create_object(dn, new_account, connection):
         # If we should propagate the password then set it to a random password
-        if account['should_propagate_password']:
-            set_password(dn, generate_password(), connection)
+        #if account['should_propagate_password']:
+            #set_password(dn, generate_password(), connection)
         # Enable the account
         enable_account(dn, connection)
         # If we should propagate the password then set it to the desired password
-        if account['should_propagate_password']:
-            set_password(dn, account['password'], connection)
+        #if account['should_propagate_password']:
+            #set_password(dn, account['password'], connection)
         # Add the account to a group based on it's primary duty
         add_account_to_primary_duty_group(
             dn,
